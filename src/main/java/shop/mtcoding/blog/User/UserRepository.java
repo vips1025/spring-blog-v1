@@ -16,7 +16,7 @@ public class UserRepository {
     }
 
     @Transactional
-    public void save(UserRequest.JoinDTO requestDTO){
+    public void save(UserRequest.JoinDTO requestDTO) {
         Query query = em.createNativeQuery("INSERT INTO user_tb(username, password, email) VALUES (?, ?, ?)");
         query.setParameter(1, requestDTO.getUsername());
         query.setParameter(2, requestDTO.getPassword());
@@ -26,12 +26,21 @@ public class UserRepository {
     }
 
     @Transactional
-    public void saveV2(UserRequest.JoinDTO requestDTO){
+    public void saveV2(UserRequest.JoinDTO requestDTO) {
         User user = new User();
         user.setUsername(requestDTO.getUsername());
         user.setPassword(requestDTO.getPassword());
         user.setEmail(requestDTO.getEmail());
 
         em.persist(user);
+    }
+
+    public User findByUsernameAndPassword(UserRequest.LoginDTO requestDTO) {
+        Query query = em.createNativeQuery("SELECT * FROM user_tb WHERE username = ? AND password =?", User.class);
+        query.setParameter(1, requestDTO.getUsername());
+        query.setParameter(2, requestDTO.getPassword());
+
+        User user = (User) query.getSingleResult();
+        return user;
     }
 }
