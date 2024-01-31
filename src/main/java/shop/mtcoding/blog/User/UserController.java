@@ -53,8 +53,16 @@ public class UserController {
             return "error/400";
         }
 
-        // 2. Model에게 위임하기
-        userRepository.save(requestDTO);
+        // 2. 동일 username 체크
+        // TODO : 하나의 트랜잭션으로 묶는것이 좋다
+        User user = userRepository.findByUsername(requestDTO.getUsername());
+        if (user == null){
+            // 3. Model에게 위임하기
+            userRepository.save(requestDTO);
+        }else {
+            return "error/400";
+        }
+
 
         return "redirect:/loginForm";
     }
