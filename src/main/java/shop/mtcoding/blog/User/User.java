@@ -1,9 +1,9 @@
 package shop.mtcoding.blog.User;
 
+import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
@@ -17,7 +17,7 @@ public class User {
     @Column(unique = true)
     private String username;
 
-    @Column(length = 60,nullable = false)
+    @Column(length = 60, nullable = false)
     private String password;
     private String email;
 

@@ -1,11 +1,9 @@
 package shop.mtcoding.blog.Board;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import shop.mtcoding.blog.User.User;
-
-import javax.servlet.http.HttpSession;
 
 @RequiredArgsConstructor
 @Controller
@@ -13,9 +11,8 @@ public class BoardController {
 
     private final HttpSession session;
 
-    @GetMapping({ "/", "/board" })
+    @GetMapping({"/", "/board"})
     public String index() {
-
 //        User sessionUser =(User) session.getAttribute("sessionUser");
 //        if (sessionUser == null){
 //            System.out.println("로그인 안된 상태입니다.");
