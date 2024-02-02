@@ -3,25 +3,41 @@ package shop.mtcoding.blog.Board;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import shop.mtcoding.blog.User.User;
+import org.springframework.web.bind.annotation.RequestParam;
+import shop.mtcoding.blog._core.PagingUtil;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
 public class BoardController {
 
     private final HttpSession session;
+    private final BoardRepository boardRepository;
 
-    @GetMapping({ "/", "/board" })
-    public String index() {
+    // http://localhost:8080?page=0
+    @GetMapping({"/", "/board"})
+    public String index(HttpServletRequest request, @RequestParam(defaultValue = "0") int page) {
+        List<Board> boardList = boardRepository.findAll(page);
+        request.setAttribute("boardList", boardList);
 
-//        User sessionUser =(User) session.getAttribute("sessionUser");
-//        if (sessionUser == null){
-//            System.out.println("로그인 안된 상태입니다.");
-//        }else{
-//            System.out.println("로그인 된 상태입니다.");
-//        }
+        int currentPage = page;
+        int nextPage = currentPage + 1;
+        int prevPage = currentPage - 1;
+
+        request.setAttribute("nextPage", nextPage);
+        request.setAttribute("prevPage", prevPage);
+
+        boolean first = PagingUtil.isFirst(currentPage);
+        // currentPage = 0, totalCount = 4, paging = 3 (3가지 정보로 조합해서 만들기)
+        boolean last = PagingUtil.isLast(currentPage, boardRepository.count());
+
+
+        request.setAttribute("first", first);
+        request.setAttribute("last", last);
+
         return "index";
     }
 
