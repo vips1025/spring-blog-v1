@@ -1,11 +1,10 @@
 package shop.mtcoding.blog.User;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import javax.servlet.http.HttpSession;
 
 /**
  * 컨트롤러
@@ -26,9 +25,9 @@ public class UserController {
     private final HttpSession session;
 
     @PostMapping("/login")
-    public String login(UserRequest.LoginDTO requestDTO){
+    public String login(UserRequest.LoginDTO requestDTO) {
         // 1 .유효성 검사
-        if(requestDTO.getUsername().length() < 3){
+        if (requestDTO.getUsername().length() < 3) {
             return "error/400";
         }
 
@@ -36,9 +35,9 @@ public class UserController {
         User user = userRepository.findByUsernameAndPassword(requestDTO);
 
         // 3. 응답
-        if (user == null){
+        if (user == null) {
             return "error/401";
-        }else {
+        } else {
             System.out.println(user);
             session.setAttribute("sessionUser", user);
             return "redirect:/";
@@ -49,21 +48,19 @@ public class UserController {
     public String join(UserRequest.JoinDTO requestDTO) {
         System.out.println(requestDTO);
         // 1. 유효성 검사
-        if(requestDTO.getUsername().length() < 3){
+        if (requestDTO.getUsername().length() < 3) {
             return "error/400";
         }
 
         // 2. 동일 username 체크
         // TODO : 하나의 트랜잭션으로 묶는것이 좋다
         User user = userRepository.findByUsername(requestDTO.getUsername());
-        if (user == null){
+        if (user == null) {
             // 3. Model에게 위임하기
             userRepository.save(requestDTO);
-        }else {
+        } else {
             return "error/400";
         }
-
-
         return "redirect:/loginForm";
     }
 

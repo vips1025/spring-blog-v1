@@ -1,11 +1,11 @@
 package shop.mtcoding.blog.Board;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import shop.mtcoding.blog._core.Constant;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -16,7 +16,7 @@ public class BoardRepository {
 
     public int count() {
         Query query = em.createNativeQuery("SELECT COUNT(*) FROM board_tb");
-        BigInteger count = (BigInteger) query.getSingleResult();
+        Long count = (Long) query.getSingleResult();
         return count.intValue();
     }
 
